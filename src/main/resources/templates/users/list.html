@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{fragments/header :: header}">
+
+</head>
+<body>
+<div class="container" >
+	    <div class="mt-3">
+	        <h2  >Welcome to waylau.com</h2>
+	    </div>
+		<div class="row">
+		    <div class="col-lg-4">
+				<div class="input-group">
+					<input type="text" class="form-control" id="searchName" placeholder="输入用户名称进行搜索">
+					<span class="input-group-btn">
+						<button class="btn btn-secondary" type="button" id="searchNameBtn">Go!</button>
+					</span>
+					<a class="btn btn-primary" href="/users/register" th:href="@{/users/add}" role="button"><i class="fa fa-plus" aria-hidden="true"></i>创建</a>
+				</div>
+		    </div>
+	    </div>	
+	    <div id="mainContainer">
+		 <div id="mainContainerRepleace">
+		    <table class="table table-striped">
+		        <thead class="thead-inverse">
+		        <tr>
+		            <th data-field="id">ID</th>
+		            <th data-field="name">账号</th>
+		            <th data-field="email">邮箱</th>
+		            <th data-field="username">姓名</th>
+		            <th data-field="authorities">权限</th>
+		             <th data-field="authority">操作</th>
+		        </tr>
+		        </thead>
+		        <tbody>
+		 
+		        <tr th:each="user:${userModel.userList}">
+		            <td th:text="${user.id}"></td>
+		            <td th:text="${user.username}"></td>
+		            <td th:text="${user.email}"></td>
+		            <td th:text="${user.name}"></td>
+		            <td th:text="${user.authorities}"></td>
+		            <td>
+		            	<div>
+		            		<button class="updateUser" th:attr="button_value=${user.id}">
+		            			<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+		            		</button>
+		        			<!-- <a th:href="@{'/users/delete/' + 1}">
+		        				<i class="fa fa-times" aria-hidden="true"></i>
+		        			</a> -->
+		        			<button th:attr="del_url='/users/'+${user.id}" class="deleteUser">
+		        			  <i class="fa fa-times" aria-hidden="true"></i>
+		        			</button>
+		        		</div>
+		        	</td>
+		   
+		        </tr>
+                
+		        </tbody>
+		        
+		    </table>
+		    
+			<div th:replace="~{fragments/page :: page}">...</div>
+	 
+	 	</div>
+	 </div>
+</div><!-- /.container -->
+
+<div th:replace="~{fragments/footer :: footer}">...</div>
+
+<form method="post" id="formRemove">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		      <input type="hidden" name="_method" value="DELETE"/>
+</form>
+</body>
+
+<!-- JavaScript -->
+<script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}">
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".updateUser").click(function(){
+		   window.location.href="http://localhost:8081/users/edit/"+$(this).attr("button_value");
+	   });
+	   $(".deleteUser").click(function(){
+		  $("#formRemove").attr("action",$(this).attr("del_url")).submit(); 
+	   });
+})
+   
+   
+</script>
+<script src="../../js/users/main.js" th:src="@{/js/users/main.js}"></script>
+</html>
